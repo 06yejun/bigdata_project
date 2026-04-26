@@ -51,7 +51,7 @@ function initMarkers() {
 
         // 🚀 마커 생성 즉시 실시간 데이터 가져와서 색상 변경
         try {
-            const res = await fetch(`http://127.0.0.1:8001/api/recommend/${loc.official}`);
+            const res = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
             const data = await res.json();
             const el = marker.getElement().querySelector('.mbti-marker-card');
             
@@ -77,7 +77,7 @@ function initMarkers() {
 
             // 실시간 데이터로 패널 상세 업데이트
             try {
-                const res = await fetch(`http://127.0.0.1:8001/api/recommend/${loc.official}`);
+                const res = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
                 const data = await res.json();
                 
                 const levelEl = document.getElementById('panel-level');
