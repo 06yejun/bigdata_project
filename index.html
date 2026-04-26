@@ -3,29 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>숨뜰 - 실 바꾼 혼잡도 피하기</title>
+    <title>VibeSeoul: 실시간 데이터로 찾는 나의 맞춤 공간"</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="card">
-        <h2>🌿 숨뜰 데이트 가이드</h2>
-        <p>현재 계신 곳이나 갈 곳을 선택하세요.</p>
-        
-        <select id="areaSelect">
-            <option value="홍대">홍대</option>
-            <option value="명동">명동</option>
-            <option value="강남">강남</option>
-            <option value="성수">성수동 카페거리</option>
-        </select>
-        
-        <button onclick="checkCongestion()">실시간 혼잡도 분석 및 추천</button>
-
-        <div id="result-box">
-            <h3><span id="res-icon"></span> <span id="res-area"></span> 상태: <span id="res-level" class="highlight"></span></h3>
-            <p id="res-msg"></p>
+    <header class="top-nav">
+        <div class="nav-left">
+            <h1 class="logo" style="cursor:pointer;" onclick="location.reload();">VibeSeoul</h1>
         </div>
-    </div>
+        <div class="search-area">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="상권 이름 검색">
+                <button id="geo-btn" class="icon-button">
+                    <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/>
+                        <path d="M12 3V0"/><path d="M12 24V21"/><path d="M3 12H0"/><path d="M24 12H21"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="nav-right"></div>
+    </header>
+
+    <main class="main-container">
+        <div id="map"></div>
+
+        <aside class="panel" id="panel">
+            <header class="panel-header">
+                <div>
+                    <h2 id="panel-title">상권을 선택하세요</h2>
+                    <span class="mbti-tag" id="panel-mbti">MBTI</span>
+                </div>
+            </header>
+            
+            <section class="panel-body">
+                <div class="info-section">
+                    <h4>💡 상권 감성 설명</h4>
+                    <p id="panel-desc">지도의 마커를 클릭하면 실시간 혼잡도와 날씨를 확인할 수 있습니다.</p>
+                </div>
+
+                <div class="status-grid">
+                    <div class="congestion-box" id="congest-container">
+                        <span class="label">실시간 혼잡도</span>
+                        <p class="status" id="panel-level">-</p>
+                        <p class="msg" id="panel-msg"></p>
+                    </div>
+                    <div class="weather-box">
+                        <span class="label">날씨</span>
+                        <div class="w-info">
+                            <span class="w-icon" id="weather-icon">☀️</span>
+                            <p class="w-temp" id="weather-temp">-°C</p>
+                        </div>
+                        <p class="w-msg" id="weather-msg">맑음</p>
+                        <p class="w-dust">미세먼지 <strong id="dust-status">보통</strong></p>
+                    </div>
+                </div>
+            </section>
+        </aside>
+    </main>
 
     <script src="script.js"></script>
 </body>

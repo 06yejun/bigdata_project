@@ -1,56 +1,314 @@
+* { margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Pretendard', sans-serif; 
+}
+
 body { 
-    font-family: 'Malgun Gothic', sans-serif; 
-    background: #f0f2f5; 
+    background: #f4f7f6; 
+    color: #333; 
+    overflow: hidden; 
+}
+
+/* 상단바 */
+
+.top-nav {
+    display: grid; 
+    grid-template-columns: 1fr 2fr 1fr; 
+    align-items: center;
+    padding: 0 30px; 
+    background: #fff; 
+    border-bottom: 1px solid #eee;
+    height: 60px; 
+    position: fixed; 
+    top: 0; 
+    width: 100%; 
+    z-index: 1000;
+}
+.nav-left .logo {
+    color: #FF7675; 
+    font-size: 20px; 
+    font-weight: 800; 
+}
+
+.search-area { 
     display: flex; 
     justify-content: center; 
-    padding: 50px; 
+    width: 100%; 
 }
 
-.card { 
-    background: white; 
-    padding: 30px; 
-    border-radius: 12px; 
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+.search-bar {
+    position: relative; 
     width: 100%; 
     max-width: 400px; 
-    text-align: center; 
 }
 
-select, button { 
+.search-bar input {
     width: 100%; 
-    padding: 12px; 
-    margin-bottom: 20px; 
-    border-radius: 8px; 
-    border: 1px solid #ccc; 
-    font-size: 16px; 
-    box-sizing: border-box; 
+    padding: 10px 45px 10px 20px; 
+    border-radius: 25px; 
+    border: 1px solid #ddd; 
+    background: #f9f9f9; 
+    font-size: 14px; 
 }
 
-button { 
-    background-color: #2c3e50; 
-    color: white; 
-    border: none; 
+.icon-button {
+    position: absolute; 
+    right: 15px; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    border: none;
+    background: none;
     cursor: pointer; 
-    font-weight: bold; 
+    color: #FF7675; 
+    display: flex; 
+    align-items: center; 
 }
 
-button:hover { 
-    background-color: #1a252f; 
+.icon-button:hover {
+    color: #ff5252; 
+    transform: translateY(-50%) scale(1.1); 
 }
 
-#result-box { 
-    display: none; 
-    background: #e8f4fd; 
-    padding: 20px; 
-    border-radius: 8px; 
-    border-left: 5px solid #3498db; 
-    text-align: left; 
-    margin-top: 20px; 
-    line-height: 1.6;
+.location-icon {
+    width: 18px;
+    height: 18px; 
 }
 
-.highlight { 
+/* 메인 레이아웃 (지도 꽉 차게) */
+.main-container {
+    display: flex; 
+    height: calc(100vh - 60px); 
+    margin-top: 60px; 
+    width: 100%; 
+}
+
+#map { 
+    flex: 1; 
+    height: 100%; 
+    width: 100%; 
+    z-index: 1; 
+    background-color: #e5e3df; 
+}
+
+/* 패널 */
+.panel { 
+    width: 380px; 
+    background: #fff; 
+    border-left: 1px solid #eee; 
+    overflow-y: auto; 
+    z-index: 10; 
+    padding: 25px; 
+}
+
+.panel-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    margin-bottom: 20px; 
+}
+
+.panel-header h2 { 
+    font-size: 20px; 
+    font-weight: 700; 
+}
+
+.mbti-tag { 
+    display: inline-block; 
+    background: #FF7675; 
+    color: #fff; 
+    padding: 3px 8px; 
+    border-radius: 4px; 
+    font-size: 12px; 
+    font-weight: 600; 
+    margin-top: 5px; 
+}
+
+.panel-body { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 20px; 
+}
+
+.info-section h4 { 
+    font-size: 14px; 
+    color: #777; 
+    margin-bottom: 5px; 
+}
+
+.info-section p { 
+    font-size: 13px; 
+    line-height: 1.6; 
+    color: #555; 
+}
+
+.status-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 15px; 
+}
+
+.congestion-box, .weather-box { 
+    background: #f9f9f9; 
+    padding: 15px; 
+    border-radius: 12px; 
+    border: 1px solid #eee; 
+}
+
+.label { 
+    font-size: 12px; 
+    color: #888; 
+    display: block; 
+    margin-bottom: 8px; 
+}
+
+.status { 
+    font-size: 18px; 
+    font-weight: 700; 
+    color: #333; 
+}
+
+.msg { 
+    font-size: 11px; 
+    color: #777; 
+    margin-top: 3px; 
+}
+
+.congestion-box.low .status { 
+    color: #27ae60; 
+}
+
+.congestion-box.medium .status { 
+    color: #f39c12; 
+}
+
+.congestion-box.high .status { 
     color: #e74c3c; 
-    font-weight: bold; 
-    font-size: 1.2em; 
 }
+
+.w-info { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    margin-bottom: 3px; 
+}
+
+.w-icon {
+    font-size: 24px; 
+}
+
+.w-temp {
+    font-size: 18px; 
+    font-weight: 700; 
+}
+
+.w-msg { 
+    font-size: 12px; 
+    font-weight: 600; 
+}
+
+.w-dust { 
+    font-size: 11px; 
+    color: #888; 
+    margin-top: 3px; 
+}
+
+.recommend-section h4 { 
+    font-size: 15px; 
+    font-weight: 700; 
+    margin-bottom: 12px; 
+}
+
+.course-list { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+}
+
+.course-card { 
+    display: flex; 
+    align-items: flex-start; 
+    gap: 12px; 
+    background: #fff; 
+    border: 1px solid #f0f0f0; 
+    border-radius: 10px; 
+    padding: 12px; 
+}
+
+.course-idx { 
+    width: 22px; 
+    height: 22px; 
+    background: #FF7675; 
+    color: #fff; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-size: 12px; 
+    font-weight: 700; 
+    flex-shrink: 0; 
+}
+
+.course-info strong { 
+    font-size: 13px; 
+    font-weight: 700; 
+}
+
+.course-info p { 
+    font-size: 12px; 
+    color: #666; 
+    margin-top: 2px; 
+}
+
+/* MBTI 카드 마커 */
+.mbti-marker-card {
+    background: rgba(255, 255, 255, 0.95); 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 10px; 
+    text-align: center; 
+    transition: all 0.3s ease; 
+    backdrop-filter: blur(5px); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+}
+
+.mbti-marker-card:hover {
+    transform: scale(1.1); 
+    z-index: 1000 !important; 
+    box-shadow: 0 6px 15px rgba(255, 118, 117, 0.3); 
+}
+
+
+.mbti-name { 
+    font-size: 16px;           /* 지역명 크기를 키움 */
+    font-weight: 800; 
+    color: #333; 
+    margin-bottom: 2px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+
+.mbti-type { 
+    font-size: 12px;           /* MBTI 크기를 줄임 */
+    color: #666; 
+    font-weight: 600; 
+    letter-spacing: 0.5px; 
+}
+
+/* 혼잡도 단계별 색상 정의 */
+.congestion-box.low .status { 
+    color: #27ae60; 
+}    /* 여유: 초록색 */
+
+.congestion-box.medium .status { 
+    color: #f39c12; 
+} /* 보통: 주황색 */
+
+.congestion-box.high .status { 
+    color: #e74c3c; 
+}   /* 붐빔: 빨간색 */
