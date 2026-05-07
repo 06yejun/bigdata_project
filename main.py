@@ -74,7 +74,8 @@ async def get_ai_course(area_name: str):
         ]
         """
         
-        gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={GEMINI_API_KEY}"
+        # 🚀 2.5를 1.5로만 바꿔주시면 됩니다!
+        gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
         payload = {"contents": [{"parts": [{"text": prompt}]}]}
         
         # 3. 제미나이 호출 (시간을 30초로 넉넉히 줍니다)
