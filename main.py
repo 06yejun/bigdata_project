@@ -18,10 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 🔑 본인의 API 키를 입력하세요!
-SEOUL_API_KEY = "4c4663594b3036793731476d445950"
-GEMINI_API_KEY = "AIzaSyDS2tKuxzXSHkMYTp-uVF4_Rcfjt9qyJMY"
-
 @app.get("/")
 def read_root():
     return {"message": "서예준 님의 AI 데이트 추천 서버가 실행 중입니다! 🚀"}
