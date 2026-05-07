@@ -107,7 +107,7 @@ function initMarkers() {
                 aiBox.innerHTML = "🤖 AI가 코스를 구성 중입니다..."; // innerText 대신 innerHTML 사용
                 
                 try {
-                    const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/ai-course/${loc.official}`);
+                    const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
                     const data = await aiRes.json();
                     
                     // 🚀 기존 내용을 비우고 섹션을 새로 만듭니다.
