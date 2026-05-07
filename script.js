@@ -51,7 +51,8 @@ function initMarkers() {
 
         // 🚀 마커 생성 즉시 실시간 데이터 가져와서 색상 변경
         try {
-            const res = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
+            // 🚀 이렇게 렌더 주소로 똑같이 맞춰주세요!
+            const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/ai-course/${loc.official}`);
             const data = await res.json();
             const el = marker.getElement().querySelector('.mbti-marker-card');
             
@@ -107,7 +108,8 @@ function initMarkers() {
                 aiBox.innerHTML = "🤖 AI가 코스를 구성 중입니다..."; // innerText 대신 innerHTML 사용
                 
                 try {
-                    const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
+                    // 🚀 이렇게 렌더 주소로 똑같이 맞춰주세요!
+                    const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/ai-course/${loc.official}`);
                     const data = await aiRes.json();
                     
                     // 🚀 기존 내용을 비우고 섹션을 새로 만듭니다.
