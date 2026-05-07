@@ -53,14 +53,18 @@ function initMarkers() {
         try {
             const res = await fetch(`https://seoul-vibe-api.onrender.com/api/recommend/${loc.official}`);
             const data = await res.json();
-            const el = marker.getElement().querySelector('.mbti-marker-card');
             
-            let color = "#ccc"; 
-            if (data.congestion === "여유") color = "#27ae60";      // 초록
-            else if (data.congestion === "보통") color = "#f39c12"; // 주황
-            else if (data.congestion === "약간 붐빔" || data.congestion === "붐빔") color = "#e74c3c"; // 빨강
-
-            el.style.borderLeft = `6px solid ${color}`;
+            // 오류 방지: 마커가 화면에 그려지기 전에 찾으려고 하면 멈추는 현상 방지
+            const el = marker.getElement();
+            if (el) {
+                const card = el.querySelector('.mbti-marker-card');
+                let color = "#ccc"; 
+                if (data.congestion === "여유") color = "#27ae60";      // 초록
+                else if (data.congestion === "보통") color = "#f39c12"; // 주황
+                else if (data.congestion === "약간 붐빔" || data.congestion === "붐빔") color = "#e74c3c"; // 빨강
+    
+                card.style.borderLeft = `6px solid ${color}`;
+            }
         } catch (e) {
             console.log(`${loc.name} 데이터 업데이트 대기 중...`);
         }
@@ -71,7 +75,9 @@ function initMarkers() {
             document.getElementById('panel-title').innerText = loc.name;
             document.getElementById('panel-mbti').innerText = loc.mbti;
             document.getElementById('panel-desc').innerText = loc.desc;
-            document.getElementById('panel-level').innerText = "조회 중...";
+            
+            const pLevel = document.getElementById('panel-level');
+            if(pLevel) pLevel.innerText = "조회 중...";
             
             map.flyTo([loc.lat, loc.lng], 15);
 
@@ -82,53 +88,80 @@ function initMarkers() {
                 
                 const levelEl = document.getElementById('panel-level');
                 const cont = document.getElementById('congest-container');
-                cont.classList.remove('low', 'medium', 'high');
+                const msgEl = document.getElementById('panel-msg');
 
-                levelEl.innerText = data.congestion;
-                document.getElementById('panel-msg').innerText = data.recommend_message;
+                if(cont) cont.classList.remove('low', 'medium', 'high');
+                if(levelEl) levelEl.innerText = data.congestion;
+                if(msgEl) msgEl.innerText = data.recommend_message;
 
                 // 혼잡도 단계별 색상 적용
-                if (data.congestion === "여유") cont.classList.add('low');
-                else if (data.congestion === "보통") cont.classList.add('medium');
-                else cont.classList.add('high');
-
-                // 날씨 정보 적용
-                if (data.weather) {
-                    document.getElementById('weather-temp').innerText = `${data.weather.temp}°C`;
-                    document.getElementById('weather-msg').innerText = data.weather.msg;
-                    document.getElementById('dust-status').innerText = data.weather.pm10;
+                if (cont) {
+                    if (data.congestion === "여유") cont.classList.add('low');
+                    else if (data.congestion === "보통") cont.classList.add('medium');
+                    else cont.classList.add('high');
                 }
-            } catch (err) {
-                document.getElementById('panel-level').innerText = "오류";
-            }
 
-            const aiBox = document.getElementById('ai-course-result');
-            if (aiBox) {
-                aiBox.innerHTML = "🤖 AI가 코스를 구성 중입니다..."; // innerText 대신 innerHTML 사용
+                // 날씨 정보 적용 (요소가 없을 때 에러나는 것 방지)
+                if (data.weather) {
+                    const wTemp = document.getElementById('weather-temp');
+                    const wMsg = document.getElementById('weather-msg');
+                    const dStatus = document.getElementById('dust-status');
+                    
+                    if(wTemp) wTemp.innerText = `${data.weather.temp}°C`;
+                    if(wMsg) wMsg.innerText = data.weather.msg;
+                    if(dStatus) dStatus.innerText = data.weather.pm10;
+                }
+
+                // 🚀 AI 코스 생성 핵심 로직
+                const aiBox = document.getElementById('ai-course-result');
+                
+                // 1. 만약 HTML에 박스가 없다면 크게 경고창을 띄웁니다!
+                if (!aiBox) {
+                    console.error("🚨 HTML 파일에 id가 'ai-course-result'인 태그가 없습니다!");
+                    alert("앗! HTML에 AI를 띄울 박스가 없습니다. index.html 코드를 확인해주세요.");
+                    return; // 더 이상 진행하지 않음
+                }
+
+                // 2. 박스가 있다면 정상 진행
+                aiBox.innerHTML = "🤖 AI가 코스를 구성 중입니다..."; 
                 
                 try {
                     const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/ai-course/${loc.official}`);
-                    const data = await aiRes.json();
+                    const aiData = await aiRes.json();
                     
-                    // 🚀 기존 내용을 비우고 섹션을 새로 만듭니다.
                     aiBox.innerHTML = ""; 
 
-                    data.courses.forEach((item, index) => {
-                        const section = document.createElement('div');
-                        section.className = 'course-item'; // CSS에서 꾸밀 클래스 이름
-                        section.innerHTML = `
-                            <div class="course-header">
-                                <span class="course-number">${index + 1}</span>
-                                <span class="course-icon">${item.icon}</span>
-                                <span class="course-place">${item.place}</span>
-                            </div>
-                            <div class="course-reason">${item.reason}</div>
-                        `;
-                        aiBox.appendChild(section);
-                    });
+                    // AI가 제대로 된 리스트(courses)를 주었을 때만 실행
+                    if (aiData.courses && aiData.courses.length > 0) {
+                        aiData.courses.forEach((item, index) => {
+                            const section = document.createElement('div');
+                            section.className = 'course-item'; 
+                            section.innerHTML = `
+                                <div class="course-header">
+                                    <span class="course-number">${index + 1}</span>
+                                    <span class="course-icon">${item.icon}</span>
+                                    <span class="course-place">${item.place}</span>
+                                </div>
+                                <div class="course-reason">${item.reason}</div>
+                            `;
+                            aiBox.appendChild(section);
+                        });
+                    } else {
+                        // 서버가 에러를 보냈거나 데이터가 비어있을 때
+                        aiBox.innerHTML = "❌ AI 응답 형식이 올바르지 않습니다.";
+                        console.error("서버에서 받은 AI 데이터 이상:", aiData);
+                    }
                 } catch (err) {
-                    aiBox.innerHTML = "❌ 데이터를 가져오지 못했습니다.";
+                    // 통신 자체가 실패했을 때
+                    console.error("AI 통신 중 오류 발생:", err);
+                    aiBox.innerHTML = "❌ 서버와 통신할 수 없습니다.";
                 }
+                
+            } catch (err) {
+                // 혼잡도/날씨 업데이트 중 오류 발생 시
+                console.error("기본 정보 업데이트 오류:", err);
+                const levelEl = document.getElementById('panel-level');
+                if(levelEl) levelEl.innerText = "오류 발생";
             }
         });
     });

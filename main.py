@@ -1,10 +1,14 @@
-import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+import os
 import requests
 import json
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+# 🚀 Render에 등록한 환경 변수(API 키)를 파이썬이 읽어오도록 설정
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+SEOUL_API_KEY = os.getenv("SEOUL_API_KEY")
 
 # 프론트엔드와 통신을 위한 설정
 app.add_middleware(
@@ -90,9 +94,8 @@ async def get_ai_course(area_name: str):
             
             return {"courses": course_list} # 🚀 자바스크립트로 리스트 전송!
         else:
-            return {"courses": [], "error": "AI 응답 형식 오류"}
+            # 🚀 수정: "형식 오류"라고 퉁치지 말고, 제미나이가 보낸 원본을 그대로 보내라!
+            return {"courses": [], "error": f"제미나이 원본 에러: {result_data}"}
 
     except Exception as e:
-        print(f"에러 발생: {e}")
-        # 에러 발생 시 빈 리스트를 보내서 프론트엔드가 멈추지 않게 합니다.
         return {"courses": [], "error": str(e)}
