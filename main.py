@@ -20,7 +20,7 @@ app.add_middleware(
 
 # 🔑 본인의 API 키를 입력하세요!
 SEOUL_API_KEY = "4c4663594b3036793731476d445950"
-GEMINI_API_KEY = "AIzaSyBoLQF7HEj0kE8230uLXs3iNbtQPSDfysM"
+GEMINI_API_KEY = "AIzaSyDS2tKuxzXSHkMYTp-uVF4_Rcfjt9qyJMY"
 
 @app.get("/")
 def read_root():
