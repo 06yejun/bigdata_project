@@ -9,10 +9,9 @@ app = FastAPI()
 # 프론트엔드와 통신을 위한 설정
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # 모든 사이트(깃허브 포함)에서 접속 허용
-    allow_credentials=True,
-    allow_methods=["*"], # 모든 통신 방식(GET, POST) 허용
-    allow_headers=["*"], # 모든 데이터 헤더 허용
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # 🔑 본인의 API 키를 입력하세요!
