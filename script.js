@@ -101,6 +101,35 @@ function initMarkers() {
             } catch (err) {
                 document.getElementById('panel-level').innerText = "오류";
             }
+
+            const aiBox = document.getElementById('ai-course-result');
+            if (aiBox) {
+                aiBox.innerHTML = "🤖 AI가 코스를 구성 중입니다..."; // innerText 대신 innerHTML 사용
+                
+                try {
+                    const aiRes = await fetch(`https://seoul-vibe-api.onrender.com/api/ai-course/${loc.official}`);
+                    const data = await aiRes.json();
+                    
+                    // 🚀 기존 내용을 비우고 섹션을 새로 만듭니다.
+                    aiBox.innerHTML = ""; 
+
+                    data.courses.forEach((item, index) => {
+                        const section = document.createElement('div');
+                        section.className = 'course-item'; // CSS에서 꾸밀 클래스 이름
+                        section.innerHTML = `
+                            <div class="course-header">
+                                <span class="course-number">${index + 1}</span>
+                                <span class="course-icon">${item.icon}</span>
+                                <span class="course-place">${item.place}</span>
+                            </div>
+                            <div class="course-reason">${item.reason}</div>
+                        `;
+                        aiBox.appendChild(section);
+                    });
+                } catch (err) {
+                    aiBox.innerHTML = "❌ 데이터를 가져오지 못했습니다.";
+                }
+            }
         });
     });
 }
