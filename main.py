@@ -74,9 +74,6 @@ async def get_ai_course(area_name: str):
         ]
         """
         
-        # 🚀 2.5를 1.5로만 바꿔주시면 됩니다!
-       # v1beta 대신 v1을 사용하면 1.5 flash 모델을 바로 찾을 수 있습니다!
-        # v1beta 대신 v1을 사용하면 1.5 flash 모델을 바로 찾을 수 있습니다!
         gemini_url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key={GEMINI_API_KEY}"
         payload = {"contents": [{"parts": [{"text": prompt}]}]}
         
